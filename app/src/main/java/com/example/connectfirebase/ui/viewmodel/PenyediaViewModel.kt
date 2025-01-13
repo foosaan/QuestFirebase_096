@@ -2,18 +2,25 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import com.example.connectfirebase.MahasiswaApp
+import com.example.connectfirebase.MahasiswaApplications
 import com.example.connectfirebase.ui.viewmodel.HomeViewModel
+import com.example.connectfirebase.ui.viewmodel.InsertViewModel
+
 
 object PenyediaViewModel {
     val Factory = viewModelFactory {
         initializer {
             HomeViewModel(
-                MahasiswaApp().container.mahasiswaRepository
+                mahasiswaApplications().container.mahasiswaRepository
+            )
+        }
+        initializer {
+            InsertViewModel(
+                mahasiswaApplications().container.mahasiswaRepository
             )
         }
     }
 }
 
-fun CreationExtras.MahasiswaApp(): MahasiswaApp =
-    (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as MahasiswaApp)
+fun CreationExtras.mahasiswaApplications(): MahasiswaApplications =
+    (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as MahasiswaApplications)
