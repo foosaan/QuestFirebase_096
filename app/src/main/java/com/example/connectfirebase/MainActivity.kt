@@ -1,5 +1,6 @@
 package com.example.connectfirebase
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -11,19 +12,18 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.connectfirebase.ui.navigasi.PengelolaHalaman
 import com.example.connectfirebase.ui.theme.ConnectFIREBASETheme
-import com.example.connectfirebase.ui.view.HomeScreen
-import com.example.connectfirebase.ui.view.HomeStatus
 
 class MainActivity : ComponentActivity() {
+    @SuppressLint("NewApi")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             ConnectFIREBASETheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    HomeScreen(
-                        navigateToItemEntry = {},
+                    PengelolaHalaman(
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
