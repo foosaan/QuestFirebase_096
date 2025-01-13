@@ -11,14 +11,13 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 
+
 sealed class HomeUiState {
     data class Success(val mahasiswa: List<Mahasiswa>) : HomeUiState()
-    data class Error(val message: Throwable): HomeUiState()
-    object Loading: HomeUiState()
+    data class Error(val message: Throwable) : HomeUiState()
+    object Loading : HomeUiState()
 }
-
 class HomeViewModel(private val mhs: MahasiswaRepository) : ViewModel() {
-    //mhsUIState adalah kondisi
     var mhsUIState: HomeUiState by mutableStateOf(HomeUiState.Loading)
         private set
 
@@ -30,21 +29,29 @@ class HomeViewModel(private val mhs: MahasiswaRepository) : ViewModel() {
         viewModelScope.launch {
             mhs.getMahasiswa()
                 .onStart {
-                    //Ketika dimulai, kondisi/uistate diset ke loading
-                    mhsUIState = HomeUiState.Loading
+                    mhsUIState = HomeUiState.Loading //kondisi halaman home saat loading
                 }
                 .catch {
-                    //Kalau error, akan menampilkan error
-                    mhsUIState = HomeUiState.Error(it)
+                    mhsUIState = HomeUiState.Error(it) //kondisi halaman home saat error
                 }
                 .collect{
                     mhsUIState = if (it.isEmpty()){
-                        HomeUiState.Error(Exception("Belum ada daftar mahasiswa."))
+                        HomeUiState.Error(Exception("belum ada daftar mahasiswa"))
                     }
-                    else{
+                    else {
                         HomeUiState.Success(it)
                     }
                 }
+        }
+    }
+
+    fun deleteMhs(mahasiswa: Mahasiswa) {
+        viewModelScope.launch {
+            try {
+                mhs.deleteMahasiswa(mahasiswa)
+            } catch (e: Exception) {
+                mhsUIState = HomeUiState.Error(e)
+            }
         }
     }
 }
